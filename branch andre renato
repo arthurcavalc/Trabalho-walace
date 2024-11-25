@@ -1,0 +1,37 @@
+#include <stdio.h>    // Biblioteca padrão de entrada/saída
+#include <stdlib.h>   // Biblioteca padrão para alocação de memória, controle de processos e outras operações
+#include <string.h>   // Biblioteca para manipulação de strings
+#include <ctype.h>    // Biblioteca para manipulação de caracteres
+#include <time.h>     // Biblioteca para manipulação de tempo
+
+#define MAX_PALAVRAS 100    // Define o número máximo de palavras
+#define TAM_PALAVRA 50      // Define o tamanho máximo de cada palavra e dica
+#define MAX_JOGADORES 10    // Define o número máximo de jogadores no ranking
+
+
+void mostrarRanking() {
+    printf("\n=== Ranking ===\n");
+    if (totalJogadores == 0) {
+        printf("Nenhum jogador no ranking.\n");
+        return;
+    }
+
+    for (int i = 0; i < totalJogadores; i++) {
+        printf("%d. %s - %d pontos\n", i + 1, ranking[i].nome, ranking[i].pontos);
+    }
+}
+
+void atualizarRanking(char nome[], int pontos) {
+    for (int i = 0; i < totalJogadores; i++) {
+        if (strcmp(ranking[i].nome, nome) == 0) {
+            ranking[i].pontos += pontos;
+            return;
+        }
+    }
+
+    if (totalJogadores < MAX_JOGADORES) {
+        strcpy(ranking[totalJogadores].nome, nome);
+        ranking[totalJogadores].pontos = pontos;
+        totalJogadores++;
+    }
+}
