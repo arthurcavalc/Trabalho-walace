@@ -1,8 +1,8 @@
-#include <stdio.h> // Biblioteca padrÃ£o de entrada/saÃ­da
-#include <stdlib.h> // Biblioteca padrÃ£o para alocaÃ§Ã£o de memÃ³ria, controle de processos e outras operaÃ§Ãµes
-#include <string.h> // Biblioteca para manipulaÃ§Ã£o de strings
-#include <ctype.h>  // Biblioteca para manipulaÃ§Ã£o de caracteres
-#include <time.h>  // Biblioteca para manipulaÃ§Ã£o de tempo
+#include <stdio.h> // Biblioteca padrao de entrada/saÃ­da
+#include <stdlib.h> // Biblioteca padrao para alocacao de memoria, controle de processos e outras operacoes
+#include <string.h> // Biblioteca para manipulacao de strings
+#include <ctype.h>  // Biblioteca para manipulacao de caracteres
+#include <time.h>  // Biblioteca para manipulacao de tempo
 
 #define MAX_PALAVRAS 100
 #define TAM_PALAVRA 50
@@ -31,7 +31,7 @@ void limparBuffer() {
 
 void converterMinusculas(char* texto) {
     for (int i = 0; texto[i]; i++) {
-        texto[i] = tolower(texto[i]);  // Converte cada caractere de 'texto' para minÃºsculo
+        texto[i] = tolower(texto[i]);  // Converte cada caractere de 'texto' para minusculo
     }
 }
 
@@ -42,7 +42,7 @@ void cadastrarPalavra() {
     }
 
     printf("Digite a palavra (sem espaços): ");
-    scanf("%s", palavras[totalPalavras].palavra); // LÃª a palavra digitada
+    scanf("%s", palavras[totalPalavras].palavra); // Leia a palavra digitada
     limparBuffer();
     converterMinusculas(palavras[totalPalavras].palavra); // Converte a palavra para minÃºsculas
 
@@ -83,7 +83,7 @@ void atualizarRanking(char nome[], int pontos) {
 
 void jogarContraComputador() {
     char nome[30];
-    printf("Digite seu nome: "); // LÃª o nome do jogador
+    printf("Digite seu nome: "); // Leia o nome do jogador
     scanf("%s", nome);
     limparBuffer();
 
@@ -97,7 +97,7 @@ void jogarContraComputador() {
     }
     descoberta[tamanho] = '\0';
 
-    int tentativas = 6; // Define o nÃºmero de tentativas
+    int tentativas = 6; // Define o numero de tentativas
     int acertou = 0; // Inicializa o status de acerto
 
     while (tentativas > 0 && !acertou) {
@@ -107,7 +107,7 @@ void jogarContraComputador() {
         printf("Digite uma letra: ");
         char letra;
         if (scanf(" %c", &letra) != 1) {
-            printf("Entrada inválida! Digite apenas uma letra.\n");  // LÃª a entrada do jogador (letra ou palavra)
+            printf("Entrada inválida! Digite apenas uma letra.\n");  // Leia a entrada do jogador (letra ou palavra)
             limparBuffer();
             continue;
         }
@@ -251,11 +251,11 @@ void menu() {
             default:
                 printf("Opção inválida! Tente novamente.\n");
         }
-    } while (opcao != 5); // Loop do menu atÃ© que o usuÃ¡rio escolha sair
+    } while (opcao != 5); // Loop do menu até que o usuario escolha sair
 }
 
 int main() {
-    srand((unsigned int)time(NULL));  // Inicializa a semente do gerador de nÃºmeros aleatÃ³rios
+    srand((unsigned int)time(NULL));  // Inicializa a semente do gerador de numeros aleatorios
     menu(); // Chama a funcao do menu principal
     return 0; // Retorna 0 para indicar que o programa terminou com sucesso
 }
