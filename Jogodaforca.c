@@ -8,129 +8,24 @@
 #define TAM_PALAVRA 50
 #define MAX_JOGADORES 10
 
-typedef struct {
-    char palavra[TAM_PALAVRA];
-    char dica[TAM_PALAVRA];
-} Palavra;
-
-typedef struct {
-    char nome[30];
-    int pontos;
-} Jogador;
-
-Palavra palavras[MAX_PALAVRAS];
-int totalPalavras = 0;
-
-Jogador ranking[MAX_JOGADORES];
-int totalJogadores = 0;
-
-void limparBuffer() {
-    int c;
-    while ((c = getchar()) != '\n' && c != EOF);
-}
-
-void converterMinusculas(char* texto) {
-    for (int i = 0; texto[i]; i++) {
-        texto[i] = tolower(texto[i]);
-    }
-}
-
-void salvarRanking(const char* nomeArquivo) {
-    FILE* arquivo = fopen(nomeArquivo, "w");
-    if (arquivo == NULL) {
-        printf("Erro ao abrir o arquivo para salvar o ranking!\n");
-        return;
-    }
-
-    fprintf(arquivo, "%d\n", totalJogadores);
-    for (int i = 0; i < totalJogadores; i++) {
-        fprintf(arquivo, "%s %d\n", ranking[i].nome, ranking[i].pontos);
-    }
-
-    fclose(arquivo);
-    printf("Ranking salvo com sucesso no arquivo '%s'.\n", nomeArquivo);
-}
-
-void carregarRanking(const char* nomeArquivo) {
-    FILE* arquivo = fopen(nomeArquivo, "r");
-    if (arquivo == NULL) {
-        printf("Arquivo de ranking não encontrado. Um novo ranking será criado.\n");
-        return;
-    }
-
-    fscanf(arquivo, "%d\n", &totalJogadores);
-    for (int i = 0; i < totalJogadores; i++) {
-        fscanf(arquivo, "%s %d\n", ranking[i].nome, &ranking[i].pontos);
-    }
-
-    fclose(arquivo);
-    printf("Ranking carregado com sucesso do arquivo '%s'.\n", nomeArquivo);
-}
-
-void cadastrarPalavra() {
-    if (totalPalavras >= MAX_PALAVRAS) {
-        printf("Limite de palavras atingido!\n");
-        return;
-    }
-
-    printf("Digite a palavra (sem espaços): ");
-    scanf("%s", palavras[totalPalavras].palavra);
-    limparBuffer();
-    converterMinusculas(palavras[totalPalavras].palavra);
-
-    printf("Digite a dica: ");
-    fgets(palavras[totalPalavras].dica, TAM_PALAVRA, stdin);
-    palavras[totalPalavras].dica[strcspn(palavras[totalPalavras].dica, "\n")] = '\0';
-
-    totalPalavras++;
-    printf("Palavra cadastrada com sucesso!\n");
-}
-
-void mostrarRanking() {
-    printf("\n=== Ranking ===\n");
-    if (totalJogadores == 0) {
-        printf("Nenhum jogador no ranking.\n");
-        return;
-    }
-
-    for (int i = 0; i < totalJogadores; i++) {
-        printf("%d. %s - %d pontos\n", i + 1, ranking[i].nome, ranking[i].pontos);
-    }
-}
-
-void atualizarRanking(char nome[], int pontos) {
-    for (int i = 0; i < totalJogadores; i++) {
-        if (strcmp(ranking[i].nome, nome) == 0) {
-            ranking[i].pontos += pontos;
-            return;
-        }
-    }
-
-    if (totalJogadores < MAX_JOGADORES) {
-        strcpy(ranking[totalJogadores].nome, nome);
-        ranking[totalJogadores].pontos = pontos;
-        totalJogadores++;
-    }
-}
-
 void jogarContraComputador() {
     char nome[30];
     printf("Digite seu nome: ");
-    scanf("%s", nome);
+    scanf("%s", nome);    // Lê o nome do jogador
     limparBuffer();
 
-    char palavra[] = "wallace"; 
-    char dica[] = "Nome próprio";
-    int tamanho = strlen(palavra);
+    char palavra[] = "wallace";    // Define a palavra a ser adivinhada
+    char dica[] = "Nome próprio";    // Define a dica da palavra
+    int tamanho = strlen(palavra);    // Calcula o tamanho da palavra
 
     char descoberta[TAM_PALAVRA];
     for (int i = 0; i < tamanho; i++) {
-        descoberta[i] = '_';
+        descoberta[i] = '_';    // Inicializa a palavra descoberta com sublinhados
     }
     descoberta[tamanho] = '\0';
 
-    int tentativas = 6;
-    int acertou = 0;
+    int tentativas = 6;    // Define o número de tentativas
+    int acertou = 0;    // Inicializa o status de acerto
 
     while (tentativas > 0 && !acertou) {
         printf("\nPalavra: %s\n", descoberta);
@@ -139,24 +34,24 @@ void jogarContraComputador() {
         printf("Digite uma letra ou tente adivinhar a palavra: ");
 
         char entrada[TAM_PALAVRA];
-        scanf("%s", entrada);
+        scanf("%s", entrada);    // Lê a entrada do jogador (letra ou palavra)
         limparBuffer();
         converterMinusculas(entrada);
 
-        if (strlen(entrada) > 1) { 
+        if (strlen(entrada) > 1) {    // Se a entrada for uma palavra
             if (strcmp(entrada, palavra) == 0) {
-                acertou = 1;
-                strcpy(descoberta, palavra);
+                acertou = 1;    // Se a palavra estiver correta
+                strcpy(descoberta, palavra);    // Copia a palavra para descoberta
             } else {
                 tentativas--;
                 printf("Palavra incorreta!\n");
             }
-        } else { 
+        } else {    // Se a entrada for uma letra
             char letra = entrada[0];
             int encontrou = 0;
             for (int i = 0; i < tamanho; i++) {
                 if (palavra[i] == letra && descoberta[i] == '_') {
-                    descoberta[i] = palavra[i];
+                    descoberta[i] = palavra[i];    // Atualiza a palavra descoberta com a letra correta
                     encontrou = 1;
                 }
             }
@@ -169,21 +64,21 @@ void jogarContraComputador() {
         }
 
         if (strcmp(descoberta, palavra) == 0) {
-            acertou = 1;
+            acertou = 1;    // Se a palavra foi totalmente descoberta
         }
     }
 
     if (acertou) {
         printf("\nParabéns, você acertou a palavra: %s!\n", palavra);
-        atualizarRanking(nome, 10);
+        atualizarRanking(nome, 10);    // Atualiza o ranking com os pontos do jogador
     } else {
         printf("\nVocê perdeu! A palavra era: %s\n", palavra);
     }
 }
 
 void menu() {
-    const char* nomeArquivoRanking = "ranking.txt";
-    carregarRanking(nomeArquivoRanking);
+    const char* nomeArquivoRanking = "ranking.txt";    // Nome do arquivo de ranking
+    carregarRanking(nomeArquivoRanking);    // Carrega o ranking do arquivo
 
     int opcao;
     do {
@@ -212,17 +107,21 @@ void menu() {
                 mostrarRanking();
                 break;
             case 5:
-                salvarRanking(nomeArquivoRanking);
+                mostrarRanking();
+                break;
+            case 6:
+                salvarRanking(nomeArquivoRanking);    // Salva o ranking no arquivo antes de sair
                 printf("Saindo...\n");
                 break;
             default:
                 printf("Opção inválida! Tente novamente.\n");
         }
-    } while (opcao != 5);
+    } while (opcao != 5);    // Loop do menu até que o usuário escolha sair
 }
 
 int main() {
-    srand((unsigned int)time(NULL));
-    menu();
-    return 0;
+    srand((unsigned int)time(NULL));    // Inicializa a semente do gerador de números aleatórios
+    menu();    // Chama a função do menu principal
+    return 0;    // Retorna 0 para indicar que o programa terminou com sucesso
 }
+
